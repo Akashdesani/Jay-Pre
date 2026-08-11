@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polymorphism Presentation - PC Edition</title>
+
+<style>
+:root {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --accent-color: #38bdf8;
+    --accent-gradient: linear-gradient(135deg, #38bdf8, #818cf8);
+    --text-main: #f8fafc;
+    --text-muted: #cbd5e1;
+    --code-bg: #020617;
+    --frame-border: rgba(56, 189, 248, 0.35);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background:
+        radial-gradient(circle at top left, #1e3a5f 0%, transparent 35%),
+        radial-gradient(circle at bottom right, #312e81 0%, transparent 35%),
+        var(--bg-color);
+
+    color: var(--text-main);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* PC Presentation Area */
+.presentation-container {
+    width: 94vw;
+    height: 92vh;
+    max-width: 1600px;
+    min-width: 1000px;
+
+    background: rgba(30, 41, 59, 0.96);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 18px;
+
+    box-shadow:
+        0 30px 70px rgba(0,0,0,0.65),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+
+    padding: 30px 35px 25px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* Slides */
+.slide {
+    display: none;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+    justify-content: center;
+
+    animation: fadeIn 0.35s ease;
+}
+
+.slide.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Headings */
+h1 {
+    font-size: clamp(3rem, 5vw, 5rem);
+    margin-bottom: 20px;
+
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h2 {
+    font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+    color: var(--accent-color);
+    margin-bottom: 12px;
+}
+
+p,
+li {
+    font-size: clamp(1.05rem, 1.35vw, 1.4rem);
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+p:hover,
+li:hover,
+h1:hover,
+h2:hover {
+    color: var(--accent-color);
+}
+
+ul {
+    margin-left: 30px;
+    margin-top: 15px;
+}
+
+.highlight {
+    color: white;
+    font-weight: 600;
+}
+
+/* Single Full-Width Box Layout for Content (Theory or Code) with Fixed Height & Scrolling */
+.single-frame-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 68vh; /* Fixed height so the slide frame never grows or stretches */
+    min-height: 0;
+}
+
+.frame-box {
+    background: rgba(2, 6, 23, 0.65);
+
+    border: 2px solid var(--frame-border);
+    border-radius: 14px;
+
+    padding: 16px 20px;
+
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+    min-height: 0;
+
+    box-shadow:
+        inset 0 2px 8px rgba(0,0,0,0.4),
+        0 5px 15px rgba(0,0,0,0.15);
+    
+    flex: 1;
+}
+
+.frame-title {
+    font-size: 1.2rem;
+    color: var(--accent-color);
+
+    text-align: center;
+    font-weight: bold;
+
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Scrollable Content Container (for both Code and Theory boxes) */
+.scroll-content-box {
+    flex: 1;
+    min-height: 0;
+
+    background: var(--code-bg);
+
+    padding: 16px 20px;
+
+    border-radius: 9px;
+    border-left: 4px solid var(--accent-color);
+
+    font-size: clamp(1rem, 1.2vw, 1.25rem);
+    color: var(--text-muted);
+
+    /* Proper scrolling enabled */
+    overflow-y: auto;
+    overflow-x: auto;
+    line-height: 1.7;
+}
+
+/* Specific styling for Code Box */
+.code-box {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: clamp(0.85rem, 1vw, 1.05rem);
+    color: #34d399;
+}
+
+/* Custom Scrollbar Styling */
+.scroll-content-box::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.scroll-content-box::-webkit-scrollbar-track {
+    background: rgba(2, 6, 23, 0.8);
+    border-radius: 5px;
+}
+
+.scroll-content-box::-webkit-scrollbar-thumb {
+    background: rgba(56, 189, 248, 0.5);
+    border-radius: 5px;
+}
+
+.scroll-content-box::-webkit-scrollbar-thumb:hover {
+    background: rgba(56, 189, 248, 0.8);
+}
+
+.code-line {
+    display: block;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: 0.2s;
+    white-space: pre;
+}
+
+.code-line:hover {
+    background: rgba(56,189,248,0.2);
+    color: white;
+}
+
+/* Center slides */
+.center-content {
+    text-align: center;
+    align-items: center;
+}
+
+/* Controls */
+.controls {
+    flex-shrink: 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-top: 1px solid rgba(255,255,255,0.12);
+
+    padding-top: 16px;
+    margin-top: 18px;
+}
+
+button {
+    background: var(--accent-gradient);
+
+    color: white;
+    border: none;
+
+    padding: 12px 30px;
+
+    font-size: 1rem;
+    font-weight: 600;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(56,189,248,0.25);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.slide-counter {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+/* Translation Modal */
+#translation-modal {
+    position: fixed;
+
+    top: 20px;
+    right: 20px;
+
+    background: #0284c7;
+    color: white;
+
+    padding: 16px 20px;
+
+    border-radius: 9px;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+
+    display: none;
+
+    z-index: 9999;
+
+    width: min(450px, 90vw);
+
+    animation: slideIn 0.3s ease;
+}
+
+#translated-text {
+    color: white !important;
+    margin-top: 6px;
+    font-size: 1.05rem !important;
+    line-height: 1.5;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* PC Fullscreen */
+body.fullscreen .presentation-container {
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+
+    border-radius: 0;
+    border: none;
+}
+
+/* Responsive backup */
+@media (max-width: 1100px) {
+    .presentation-container {
+        min-width: 0;
+        width: 96vw;
+    }
+
+    .frame-box {
+        padding: 14px;
+    }
+}
+
+@media (max-width: 800px) {
+    body {
+        overflow: auto;
+    }
+
+    .presentation-container {
+        width: 96vw;
+        height: auto;
+        min-height: 95vh;
+    }
+
+    .frame-box {
+        min-height: 350px;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- Translation Modal -->
+<div id="translation-modal">
+    <strong id="modal-title">ગુજરાતી ભાષાંતર (Gujarati):</strong>
+    <p id="translated-text"></p>
+</div>
+
+<div class="presentation-container">
+
+    <!-- Slide 1 -->
+    <div class="slide active center-content">
+        <h1>Polymorphism in OOPs</h1>
+        <p style="font-size:1.5rem;">
+            Object-Oriented Programming Concepts
+        </p>
+        <p style="margin-top:40px; font-size:1.1rem; color:var(--accent-color);">
+            Use ← → Arrow Keys or Navigation Buttons
+        </p>
+    </div>
+
+    <!-- Slide 2: Theory -->
+    <div class="slide">
+        <h2>What is Polymorphism?</h2>
+        <div class="single-frame-container">
+            <div class="frame-box">
+                <div class="frame-title">📖 Concept & Real-World Example</div>
+                <div class="scroll-content-box">
+                    <p>
+                        The word <span class="highlight">polymorphism</span> means having many forms, and it comes from the Greek words <span class="highlight">poly</span> (many) and <span class="highlight">morph</span> (forms), this means one entity can take many forms.
+                    </p>
+                    <p style="margin-top: 15px;">
+                        In simple words, we can define polymorphism as the ability of a message to be displayed in more than one form.
+                    </p>
+                    <p style="margin-top: 15px;">
+                        <span class="highlight">Real-World Example:</span> A person at the same time can have different characteristics. Like a man at the same time is a father, a husband, an employee. So the same person posses different behavior in different situations. This is called polymorphism.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Updated Example Code -->
+    <div class="slide">
+        <h2>Function Overloading Example</h2>
+        <div class="single-frame-container">
+            <!-- Fixed Frame Container with Internal Scrollable Code Box -->
+            <div class="frame-box">
+                <div class="frame-title">💻 C++ Code (Demo Class Example)</div>
+                <div class="scroll-content-box code-box">
+                    <span class="code-line">#include &lt;iostream&gt;</span>
+                    <span class="code-line">using namespace std;</span>
+                    <span class="code-line">&nbsp;</span>
+                    <span class="code-line">class Demo {</span>
+                    <span class="code-line">public:</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;// Function with 2 parameters</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;void add(int a, int b) {</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; "Sum of 2 numbers = " &lt;&lt; a + b &lt;&lt; endl;</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;}</span>
+                    <span class="code-line">&nbsp;</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;// Function with 3 parameters</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;void add(int a, int b, int c) {</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; "Sum of 3 numbers = " &lt;&lt; a + b + c &lt;&lt; endl;</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;}</span>
+                    <span class="code-line">};</span>
+                    <span class="code-line">&nbsp;</span>
+                    <span class="code-line">int main() {</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;// Object creation</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;Demo d;</span>
+                    <span class="code-line">&nbsp;</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;// Calling first function</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;d.add(10, 20);</span>
+                    <span class="code-line">&nbsp;</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;// Calling second function</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;d.add(10, 20, 30);</span>
+                    <span class="code-line">&nbsp;</span>
+                    <span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;return 0;</span>
+                    <span class="code-line">}</span>
+                    <span class="code-line">&nbsp;</span>
+                    <span class="code-line">/* Output:</span>
+                    <span class="code-line">Sum of 2 numbers = 30</span>
+                    <span class="code-line">Sum of 3 numbers = 60</span>
+                    <span class="code-line">*/</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="slide center-content">
+        <h2>Thank You!</h2>
+        <p style="font-size:1.5rem;">
+            Any Questions?
+        </p>
+        <p style="margin-top:30px; font-size:1.3rem; color:var(--accent-color);">
+            Hope this presentation helps you understand Polymorphism clearly.
+        </p>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <span class="slide-counter" id="counter">Slide 1 of 4</span>
+        <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+</div>
+
+<script>
+let currentSlide = 0;
+const slides = document.querySelectorAll(".slide");
+const counter = document.getElementById("counter");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+
+function updateSlide() {
+    slides.forEach((slide, index) => {
+        slide.classList.toggle("active", index === currentSlide);
+    });
+    counter.innerText = `Slide ${currentSlide + 1} of ${slides.length}`;
+    prevBtn.disabled = currentSlide === 0;
+    nextBtn.disabled = currentSlide === slides.length - 1;
+}
+
+function changeSlide(direction) {
+    currentSlide += direction;
+    if (currentSlide < 0) currentSlide = 0;
+    if (currentSlide >= slides.length) currentSlide = slides.length - 1;
+    updateSlide();
+}
+
+/* Keyboard Navigation */
+document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === " ") {
+        e.preventDefault();
+        changeSlide(1);
+    } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        changeSlide(-1);
+    } else if (e.key.toLowerCase() === "f") {
+        document.body.classList.toggle("fullscreen");
+    }
+});
+
+/* Translation */
+const modal = document.getElementById("translation-modal");
+const modalTitle = document.getElementById("modal-title");
+const translatedTextEl = document.getElementById("translated-text");
+
+document.addEventListener("click", async (e) => {
+    /* Close Modal if clicked outside */
+    if (modal.style.display === "block" && !modal.contains(e.target)) {
+        modal.style.display = "none";
+        return;
+    }
+
+    /* Code Line Explanation */
+    if (e.target.classList.contains("code-line")) {
+        let lineText = e.target.innerText.trim();
+        modalTitle.innerText = "કોડ લાઈન સમજૂતી (Code Line Explanation):";
+        let explanation = "";
+
+        if (lineText.includes("class Demo")) {
+            explanation = "આ Demo નામનો ક્લાસ બનાવ્યો છે.";
+        } else if (lineText.includes("void add(int a, int b)")) {
+            explanation = "આ ૨ પેરામીટર ਵਾਲું ફંક્શન છે જે બે સંખ્યાઓનો સરવાળો કરે છે.";
+        } else if (lineText.includes("void add(int a, int b, int c)")) {
+            explanation = "આ ૩ પેરામીટર ਵਾਲું ફંક્શન છે જે ત્રણ સંખ્યાઓનો સરવાળો કરે છે (ફંક્શન ઓવરલોડિંગ).";
+        } else if (lineText.includes("Demo d;")) {
+            explanation = "આ Demo ક્લાસનો `d` ઓબ્જેક્ટ બનાવ્યો છે.";
+        } else if (lineText.includes("d.add(10, 20);")) {
+            explanation = "આ પહેલા ફંક્શનને કોલ કરે છે જેમાં ૧૦ અને ૨૦ મોકલ્યા છે.";
+        } else if (lineText.includes("d.add(10, 20, 30);")) {
+            explanation = "આ બીજા ફંક્શનને કોલ કરે છે જેમાં ૧૦, ૨૦ અને ૩૦ મોકલ્યા છે.";
+        } else {
+            explanation = "આ C++ કોડની એક લાઇન છે.";
+        }
+
+        translatedTextEl.innerText = explanation;
+        modal.style.display = "block";
+        e.stopPropagation();
+        return;
+    }
+
+    /* Normal Text Translation */
+    if (e.target.matches("h1, h2, p, li")) {
+        let clickedText = e.target.innerText.trim();
+        if (!clickedText) return;
+
+        try {
+            modalTitle.innerText = "ગુજરાતી ભાષાંતર (Gujarati):";
+            let url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(clickedText)}&langpair=en|gu`;
+            let response = await fetch(url);
+            let data = await response.json();
+
+            if (data && data.responseData) {
+                translatedTextEl.innerText = data.responseData.translatedText;
+                modal.style.display = "block";
+            }
+        } catch (error) {
+            console.error("Translation error:", error);
+        }
+    }
+});
+
+/* Initial State */
+updateSlide();
+</script>
+
+</body>
+</html>
